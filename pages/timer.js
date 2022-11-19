@@ -31,7 +31,7 @@ const Timer = () => {
       >
         Stop
       </button>
-
+      hello people
       <button
         className={classes.timerReset}
         onClick={() => (timerRef.current = () => 0)}
