@@ -1,22 +1,23 @@
 import { useQuery } from "react-query";
 import Microphone from "./microphone";
 import Timer from "./timer";
+import NewPage from "./newPage";
 
 export default function Home() {
   //first argument is a name that essentially acts as your queries variable, second is a function that reurns a promise (that function will be your data fetching function)
 
-  const fetchCharacters = async () => {
-    const res = await fetch("https://rickandmortyapi.com/api/character");
-    const data = res.json();
-    return data;
-  };
+  // const fetchCharacters = async () => {
+  //   const res = await fetch("https://rickandmortyapi.com/api/character");
+  //   const data = res.json();
+  //   return data;
+  // };
 
-  const query = useQuery("characters", fetchCharacters);
+  // const query = useQuery("characters", fetchCharacters);
 
   //Can also be written as:
   // const {data, isLoading, isError} = useQuery("characters", fetchCharacters)
 
-  console.log(query);
+  // console.log(query);
   // Everything that useQuery returns:
   /* 
 data: undefined
@@ -44,13 +45,13 @@ status: "loading"
 [[Prototype]]: Object
 */
 
-  if (query.isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (query.isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (query.isError) {
-    return <div>Error... unable to fetch data</div>;
-  }
+  // if (query.isError) {
+  //   return <div>Error... unable to fetch data</div>;
+  // }
 
   return (
     <div>
@@ -70,8 +71,9 @@ status: "loading"
             </div>
           );
         })} */}
-        <Timer></Timer>
-        <Microphone />
+        {/* <Timer></Timer>
+        <Microphone /> */}
+        <NewPage />
       </h1>
     </div>
   );
