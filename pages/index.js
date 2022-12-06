@@ -16,7 +16,7 @@ export default function Home() {
   //Can also be written as:
   // const {data, isLoading, isError} = useQuery("characters", fetchCharacters)
 
-  console.log(query);
+  // console.log(query);
   // Everything that useQuery returns:
   /* 
 data: undefined

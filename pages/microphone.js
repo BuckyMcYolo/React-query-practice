@@ -1,18 +1,43 @@
 import React from "react";
 
 const Microphone = () => {
+  const [text, setText] = React.useState("");
   //create a microphone connection
-
+  const audio = [];
+  let newText;
   function getLocalStream() {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
-        window.localStream = stream;
-        window.localAudio.srcObject = stream;
-        window.localAudio.autoplay = true;
-      })
-      .catch((err) => {
-        console.error(`you got an error: ${err}`);
+        const mediaRecorder = new MediaRecorder(stream, {
+          mimeType: "audio/webm",
+        });
+        const socket = new WebSocket("wss://api.deepgram.com/v1/listen", [
+          "token",
+          process.env.DEEPGRAM_API_KEY,
+        ]);
+        socket.onopen = () => {
+          console.log("connected to deepgram");
+          mediaRecorder.addEventListener("dataavailable", (event) => {
+            socket.send(event.data);
+          });
+          mediaRecorder.start(250);
+        };
+
+        socket.onmessage = (message) => {
+          const received = JSON.parse(message.data);
+          console.log(received);
+          const transcript = received.channel.alternatives[0].transcript;
+          setText((prevTranscript) => prevTranscript + transcript + " ");
+        };
+
+        socket.onclose = () => {
+          console.log({ event: "onclose" });
+        };
+
+        socket.onerror = (error) => {
+          console.log({ event: "onerror", error });
+        };
       });
   }
 
@@ -21,7 +46,7 @@ const Microphone = () => {
       microphone
       <button onClick={getLocalStream}>Start</button>
       <br />
-      <textarea></textarea>
+      <p>{text}</p>
     </div>
   );
 };
