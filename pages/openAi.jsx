@@ -10,7 +10,7 @@ const Transcription = () => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_KEY}`,
         },
         body: audiodata,
       }
@@ -36,7 +36,7 @@ const Transcription = () => {
         const chunks = [];
         mediaRecorder.addEventListener("dataavailable", (event) => {
           chunks.push(event.data);
-          console.log(chunks.size);
+          console.log(chunks);
           const audioData = new Blob(chunks, { type: "audio/webm" });
           const formData = new FormData();
           formData.append("file", audioData, "audio.webm");
@@ -48,7 +48,7 @@ const Transcription = () => {
             console.log("stopped");
           }
         });
-        mediaRecorder.start(1000);
+        mediaRecorder.start(3000);
       });
   }
 
