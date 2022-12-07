@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useQuery } from "react-query";
 import Microphone from "./microphone";
 import Timer from "./timer";
@@ -73,6 +74,7 @@ status: "loading"
         <Timer></Timer>
         <Microphone />
       </h1>
+      <Link href="/openAi">OpenAI</Link>
     </div>
   );
 }

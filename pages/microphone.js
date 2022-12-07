@@ -3,8 +3,7 @@ import React from "react";
 const Microphone = () => {
   const [text, setText] = React.useState("");
   //create a microphone connection
-  const audio = [];
-  let newText;
+
   function getLocalStream() {
     navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
@@ -12,10 +11,10 @@ const Microphone = () => {
         const mediaRecorder = new MediaRecorder(stream, {
           mimeType: "audio/webm",
         });
-        const socket = new WebSocket("wss://api.deepgram.com/v1/listen", [
-          "token",
-          process.env.DEEPGRAM_API_KEY,
-        ]);
+        const socket = new WebSocket(
+          "wss://api.deepgram.com/v1/listen?tier=enhanced&model=general-enhanced&language=en-US&punctuate=true&version=latest&interim_results=true",
+          ["token", process.env.DEEPGRAM_API_KEY]
+        );
         socket.onopen = () => {
           console.log("connected to deepgram");
           mediaRecorder.addEventListener("dataavailable", (event) => {
@@ -29,6 +28,7 @@ const Microphone = () => {
           console.log(received);
           const transcript = received.channel.alternatives[0].transcript;
           setText((prevTranscript) => prevTranscript + transcript + " ");
+          console.log(transcript);
         };
 
         socket.onclose = () => {
