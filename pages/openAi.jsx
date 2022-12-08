@@ -18,7 +18,7 @@ const Transcription = () => {
     const data = await response.json();
     console.log(data);
     if (response.ok) {
-      setTranscription(data.text);
+      setTranscription((prevTranscription) => prevTranscription + data.text);
     }
     if (!response.ok) {
       console.log("error");
@@ -40,15 +40,18 @@ const Transcription = () => {
           const audioData = new Blob(chunks, { type: "audio/webm" });
           const formData = new FormData();
           formData.append("file", audioData, "audio.webm");
-          fetchAudio(formData);
-        });
-        mediaRecorder.addEventListener("stop", () => {
-          if (stop) {
-            mediaRecorder.stop();
+
+          mediaRecorder.onstop = () => {
             console.log("stopped");
-          }
+            fetchAudio(formData);
+          };
         });
-        mediaRecorder.start(3000);
+        mediaRecorder.start(1000);
+
+        document.getElementById("stop").addEventListener("click", () => {
+          mediaRecorder.stop();
+          console.log("stopped");
+        });
       });
   }
 
@@ -77,7 +80,10 @@ const Transcription = () => {
   return (
     <div>
       <button onClick={getLocalStream}>Start</button>
-      <button onClick={() => setStop(true)}>Stop</button>
+      <button id="stop" onClick={() => setStop(true)}>
+        Stop
+      </button>
+      <button onClick={() => setTranscription("")}>Reset</button>
       <h1>Transcription</h1>
       <p>{transcription}</p>
     </div>
